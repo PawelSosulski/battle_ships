@@ -1,6 +1,10 @@
 package BattleShipsGame.Logic;
 
 
+import BattleShipsGame.Models.SetOfShips;
+import BattleShipsGame.Models.Ship;
+import BattleShipsGame.ConsoleView.WarshipBattlefield;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -93,12 +97,10 @@ public class PrepareMultiGame {
         }
         for (int i = 0; i < 30; i++)
             System.out.println();
-
         return myShips;
     }
 
-
-    private int specifyBattlefieldSize() {
+       private int specifyBattlefieldSize() {
         boolean isFillGood = false;
         int size;
         do {

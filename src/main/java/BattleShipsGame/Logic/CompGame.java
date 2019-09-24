@@ -13,32 +13,39 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-public class MultiGame {
+public class CompGame {
 
     private Scanner scanner = new Scanner(System.in);
     private Alphabet alphabet = new Alphabet();
-    private PrepareMultiGame multiGame = new PrepareMultiGame();
+    private PrepareCompGame compGame = new PrepareCompGame();
 
     private int[] numberOfShoots;
     private int battlefieldSize;
-    private SetOfShips oneShips;
-    private SetOfShips twoShips;
-    private WarshipBattlefield oneBattlefield;
-    private WarshipBattlefield twoBattlefield;
+    private SetOfShips playerShips;
+    private SetOfShips compShips;
+    private WarshipBattlefield playerBattlefield;
+    private WarshipBattlefield compBattlefield;
     private TwoWarshipBattlefield fields;
-    private List<Coordinates> oneMissedShoots = new ArrayList<>();
-    private List<Coordinates> twoMissedShoots = new ArrayList<>();
-
+    private List<Coordinates> playerMissedShoots = new ArrayList<>();
+    private List<Coordinates> compMissedShoots = new ArrayList<>();
+    private String playerName;
+    private CompLogic compLogic;
 
     public void startGame() {
-        multiGame.prepareSetting();
-        battlefieldSize = multiGame.getBattlefieldSize();
-        oneShips = multiGame.getOneShips();
-        twoShips = multiGame.getTwoShips();
-        oneBattlefield = multiGame.getOneBattleField();
-        twoBattlefield = multiGame.getTwoBattleField();
-        fields = new TwoWarshipBattlefield(multiGame);
+
+        battlefieldSize = compGame.getBoardSize();
+        playerName = compGame.getPlayerName();
+
+        playerShips = compGame.getPlayerShips();
+        playerBattlefield = compGame.getPlayerBattleField();
+
+        compShips = compGame.getCompShips();
+        compBattlefield = compGame.getCompBattleField();
+
+        fields = new TwoWarshipBattlefield(compGame);
         numberOfShoots = new int[2];
+        compLogic = new CompLogic(battlefieldSize);
+
         System.out.println("!!!\tGra rozpoczęta\t!!!");
         System.out.println("'exit' - wyjście \t 'capitulate' - poddanie");
         shootAtShip();
@@ -50,46 +57,44 @@ public class MultiGame {
                 shootAtShipsTurns(i);
                 if (checkIfWin(i)) {
                     if (i == 1) {
-                        System.out.println("\n!!!!   " + multiGame.getPlayerOneName() + " WIN  !!!!\n");
-                        System.out.println(multiGame.getPlayerTwoName() + " field:");
-                        twoBattlefield.showBoardWhenWin(oneMissedShoots);
+                        System.out.println("\n!!!!   " + playerName + " WIN  !!!!\n");
+                        System.out.println("Computer field:");
+                        compBattlefield.showBoardWhenWin(playerMissedShoots);
                     } else {
-                        System.out.println("\n!!!!   " + multiGame.getPlayerTwoName() + " WIN  !!!!\n");
-                        System.out.println(multiGame.getPlayerOneName() + " field:");
-                        oneBattlefield.showBoardWhenWin(twoMissedShoots);
+                        System.out.println("\n!!!! COMPUTER WIN  !!!!\n");
+                        System.out.println(playerName + " field:");
+                        playerBattlefield.showBoardWhenWin(compMissedShoots);
                     }
                     System.out.println("Liczba strzałów: " + numberOfShoots[i - 1]);
                     System.exit(1);
                 }
             }
         }
-
     }
 
     private void shootAtShipsTurns(int turn) {
         //set turn-data
         fields.showFields();
-        String playerName = "";
-        SetOfShips otherPlayerShips=null;
+        String name = "";
+        SetOfShips otherPlayerShips = null;
         List<Coordinates> playerMissShoots = null;
         WarshipBattlefield otherPlayerField = null;
         if (turn == 1) {
-            playerName = multiGame.getPlayerOneName();
-            playerMissShoots = oneMissedShoots;
-            otherPlayerField = twoBattlefield;
-            otherPlayerShips = twoShips;
+            name = playerName;
+            playerMissShoots = playerMissedShoots;
+            otherPlayerField = compBattlefield;
+            otherPlayerShips = compShips;
         } else if (turn == 2) {
-            playerName = multiGame.getPlayerTwoName();
-            playerMissShoots = twoMissedShoots;
-            otherPlayerField = oneBattlefield;
-            otherPlayerShips = oneShips;
+            name = "Computer";
+            playerMissShoots = compMissedShoots;
+            otherPlayerField = playerBattlefield;
+            otherPlayerShips = playerShips;
         } else {
             System.out.println("Something goes wrong");
             System.exit(1);
         }
         // END
-
-        System.out.println("Player " + turn + ": " + playerName + " turn! Shoots: " + numberOfShoots[turn - 1]);
+        System.out.println(name + " turn! Shoots: " + numberOfShoots[turn - 1]);
         Coordinates point = getPoint(turn);
         boolean rightShoot = false;
         boolean duplicateShoot = false;
@@ -111,20 +116,22 @@ public class MultiGame {
         numberOfShoots[turn - 1]++;
         if (rightShoot && !duplicateShoot) {
             if (isShipSink)
-                System.out.println("Brawo " + playerName + ", statek zatopiony\n");
+                System.out.println("Brawo " + name + ", statek zatopiony\n");
             else
-                System.out.println(playerName + ", statek trafiony!\n");
+                System.out.println(name + ", statek trafiony!\n");
         } else if (duplicateShoot) {
-            System.out.println(playerName + ", już tutaj strzelałeś :(\n");
-
+            System.out.println(name + ", już tutaj strzelałeś :(\n");
         } else {
-            System.out.println("Nie trafiłeś " + playerName + "\n");
+            System.out.println("Nie trafiłeś " + name + "\n");
             playerMissShoots.add(point);
         }
         otherPlayerField.update(playerMissShoots);
+        if (turn == 2) {
+            compLogic.setPotentiallyPlace(rightShoot, isShipSink,point);
+        }
         if (rightShoot) {
             if (!checkIfWin(turn)) {
-                System.out.println("Player " + playerName + " kontynuuje");
+                System.out.println(name + " kontynuuje");
                 shootAtShipsTurns(turn);
             }
         }
@@ -143,9 +150,11 @@ public class MultiGame {
     private Coordinates getPoint(int turn) {
         Coordinates point = new Coordinates();
         if (turn == 1) {
-            point = getPointDuringTurn(multiGame.getPlayerOneName(), multiGame.getPlayerTwoName(), twoBattlefield);
+            point = getPointDuringTurn(playerName, "Computer", compBattlefield);
         } else if (turn == 2) {
-            point = getPointDuringTurn(multiGame.getPlayerTwoName(), multiGame.getPlayerOneName(), oneBattlefield);
+            //todo
+            System.out.println("Strzela komputer");
+            point = compLogic.getPoint();
         } else {
             System.out.println("Something goes wrong");
         }
@@ -164,8 +173,8 @@ public class MultiGame {
                     System.out.println("Wyjście z programu");
                     System.exit(1);
                 case "capitulate":
-                    System.out.println("Player " + turnPlayer + " capitulate!!");
-                    System.out.println("Player " + otherPlayer + " field:");
+                    System.out.println(turnPlayer + " capitulate!!");
+                    System.out.println(otherPlayer + " field:");
                     otherPlayerField.showBoardCapitulate();
                     System.exit(1);
             }
@@ -194,13 +203,13 @@ public class MultiGame {
 
     private boolean checkIfWin(int turn) {
         if (turn == 1) {
-            for (Ship ship : twoShips.getShipList()) {
+            for (Ship ship : compShips.getShipList()) {
                 if (!ship.checkIfSink())
                     return false;
             }
             return true;
         } else if (turn == 2) {
-            for (Ship ship : oneShips.getShipList()) {
+            for (Ship ship : playerShips.getShipList()) {
                 if (!ship.checkIfSink())
                     return false;
             }

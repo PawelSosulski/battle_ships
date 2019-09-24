@@ -1,5 +1,11 @@
 package BattleShipsGame.Logic;
 
+import BattleShipsGame.Helpers.Alphabet;
+import BattleShipsGame.Models.Coordinates;
+import BattleShipsGame.Models.SetOfShips;
+import BattleShipsGame.Models.Ship;
+import BattleShipsGame.ConsoleView.WarshipBattlefield;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

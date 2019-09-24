@@ -1,6 +1,9 @@
-package BattleShipsGame.Logic;
+package BattleShipsGame.ConsoleView;
 
-import java.util.HashMap;
+import BattleShipsGame.Models.Coordinates;
+import BattleShipsGame.Models.SetOfShips;
+import BattleShipsGame.Models.Ship;
+
 import java.util.List;
 import java.util.Map;
 

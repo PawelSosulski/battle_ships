@@ -1,4 +1,4 @@
-package BattleShipsGame.Logic;
+package BattleShipsGame.Helpers;
 
 import java.util.HashMap;
 import java.util.Map;

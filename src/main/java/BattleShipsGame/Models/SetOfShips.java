@@ -1,4 +1,4 @@
-package BattleShipsGame.Logic;
+package BattleShipsGame.Models;
 
 import java.util.*;
 
@@ -7,6 +7,7 @@ public class SetOfShips {
     private int boardSize;
     private List<Coordinates> takenPosition = new ArrayList<>();
     Random random = new Random();
+
     public SetOfShips(int boardSize) {
         this.boardSize = boardSize;
     }

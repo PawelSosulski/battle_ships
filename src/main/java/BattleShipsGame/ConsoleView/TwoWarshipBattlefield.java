@@ -1,7 +1,7 @@
-package BattleShipsGame.Logic;
+package BattleShipsGame.ConsoleView;
 
-import java.util.List;
-import java.util.Map;
+import BattleShipsGame.Logic.PrepareCompGame;
+import BattleShipsGame.Logic.PrepareMultiGame;
 
 public class TwoWarshipBattlefield {
 
@@ -11,6 +11,9 @@ public class TwoWarshipBattlefield {
     private String[][] twoBoard;
     private String oneName;
     private String twoName;
+    private String oneFieldText;
+    private String twoFieldText;
+
 
     public TwoWarshipBattlefield(PrepareMultiGame multigame) {
         this.oneBattleField = multigame.getOneBattleField();
@@ -19,15 +22,28 @@ public class TwoWarshipBattlefield {
         twoBoard = twoBattleField.getBoard();
         this.oneName = multigame.getPlayerOneName();
         this.twoName = multigame.getPlayerTwoName();
+        oneFieldText = "Player one: " + oneName + " field.";
+        twoFieldText = "Player two: " + twoName + " field.";
+    }
+
+    public TwoWarshipBattlefield(PrepareCompGame compGame) {
+        this.oneBattleField = compGame.getPlayerBattleField();
+        this.twoBattleField = compGame.getCompBattleField();
+        oneBoard = oneBattleField.getBoard();
+        twoBoard = twoBattleField.getBoard();
+        this.oneName = compGame.getPlayerName();
+        this.twoName = "Computer";
+        oneFieldText = oneName + " field.";
+        twoFieldText = "\t\t"+twoName + " field.";
     }
 
 
     public void showFields() {
         System.out.println();
-        System.out.print("Player one: " + oneName + " field.");
+        System.out.print(oneFieldText);
         for (int i = 0; i < oneBoard.length-1; i++)
             System.out.print("\t");
-        System.out.print("Player two: " + twoName + " field.");
+        System.out.print(twoFieldText);
         System.out.println();
 
         for (int i = 0; i < oneBoard.length; i++) {

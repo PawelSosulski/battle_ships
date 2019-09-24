@@ -1,4 +1,6 @@
-package BattleShipsGame.Logic;
+package BattleShipsGame.Models;
+
+import java.util.List;
 
 public class Coordinates {
     private int xCoordinate;
@@ -28,6 +30,15 @@ public class Coordinates {
         int result = xCoordinate;
         result = 31 * result + yCoordinate;
         return result;
+    }
+
+    public boolean checkPosition(List<Coordinates> table) {
+
+        for (Coordinates point : table) {
+            if (getxCoordinate() == point.getxCoordinate() && getyCoordinate() == point.getyCoordinate())
+                return true;
+        }
+        return false;
     }
 
     public int getxCoordinate() {

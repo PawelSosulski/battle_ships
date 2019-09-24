@@ -1,4 +1,6 @@
-package BattleShipsGame.Logic;
+package BattleShipsGame.Models;
+
+import BattleShipsGame.Helpers.Alphabet;
 
 import java.util.*;
 import java.util.regex.Pattern;

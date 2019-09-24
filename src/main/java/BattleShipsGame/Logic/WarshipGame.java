@@ -10,7 +10,8 @@ public class WarshipGame {
         boolean isFillGood = false;
         System.out.println("\n\t~\t~\tB A T T L E S H I P\t\tG A M E\t~\t~\n");
         do {
-            System.out.println("Rozpoczynamy gre, wybierz: '1' - gra jednosobowa\t'2' - gra dwuosobowa\t'3' - info\t'4' - exit");
+            System.out.println("Rozpoczynamy gre, wybierz: '1' - gra jednosobowa\t'2' - gra z komputerem\t" +
+                    "'3' - gra dwuosobowa\t'4' - info\t'5' - exit");
             String text = scanner.nextLine();
             switch (text) {
                 case "1":
@@ -21,13 +22,19 @@ public class WarshipGame {
                     isFillGood = true;
                     break;
                 case "2":
-                    System.out.println("Wybrano gre dwuosobową, zaczynamy !");
-                    //startMultiGame
-                    MultiGame game = new MultiGame();
-                    game.startGame();
+                    System.out.println("Wybrano grę z komputerem, zaczynamy !");
+                    CompGame compGame = new CompGame();
+                    compGame.startGame();
                     isFillGood = true;
                     break;
                 case "3":
+                    System.out.println("Wybrano gre dwuosobową, zaczynamy !");
+                    //startMultiGame
+                    MultiGame multiGame = new MultiGame();
+                    multiGame.startGame();
+                    isFillGood = true;
+                    break;
+                case "4":
                     for (int i =0;i<25;i++)
                         System.out.print("***\t");
                     System.out.println("\n");
@@ -40,7 +47,7 @@ public class WarshipGame {
                         System.out.print("***\t");
                     System.out.println("\n\n\n");
                     break;
-                case "4":
+                case "5":
                     System.out.println("Wyjście z programu");
                     System.exit(1);
                     break;

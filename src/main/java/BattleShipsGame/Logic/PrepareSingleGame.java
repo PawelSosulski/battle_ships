@@ -1,5 +1,9 @@
 package BattleShipsGame.Logic;
 
+import BattleShipsGame.Models.SetOfShips;
+import BattleShipsGame.Models.Ship;
+import BattleShipsGame.ConsoleView.WarshipBattlefield;
+
 import java.util.Scanner;
 
 public class PrepareSingleGame {
